@@ -416,12 +416,12 @@ class REPLSession:
             self._ensure_budget(allow_equal=True)
             
             return response.text if hasattr(response, 'text') else str(response)
-        except (RecursionError, MaxIterationsError):
+        except (RecursionError, MaxIterationsError, CostBudgetExceededError):
             # Don't catch these - let them propagate
             raise
         except Exception as e:
-            # Handle API errors gracefully
-            return f"Error: {str(e)}"
+            # Re-raise all other errors - don't swallow them
+            raise
         finally:
             # Decrement depth counter
             with self._lock:
@@ -458,11 +458,6 @@ class REPLSession:
     
     def get_cost(self) -> float:
         """Get total cost accumulated."""
-        return self._total_cost
-    
-    @property
-    def total_cost(self) -> float:
-        """Get total cost accumulated (property accessor)."""
         return self._total_cost
     
     def get_cost_breakdown(self) -> Dict[str, Any]:
@@ -668,9 +663,12 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
                 code = response.text if hasattr(response, 'text') else str(response)
                 self._record_cost(response)
                 self._ensure_budget(allow_equal=True)
+            except (CostBudgetExceededError, MaxIterationsError):
+                # Budget/iteration errors should propagate
+                raise
             except Exception as e:
-                # API error - return error message
-                return f"Error: {str(e)}"
+                # API error - raise instead of returning error string
+                raise RuntimeError(f"LLM API error: {str(e)}") from e
             
             # Execute the code
             try:
@@ -701,15 +699,21 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
         self._setup_namespace()
 
     def _record_cost(self, response: Any) -> None:
-        """Record cost from response or LLM client."""
-        cost_value = None
-        if hasattr(response, 'cost_usd'):
-            cost_value = response.cost_usd
+        """Record cost from response."""
+        # Prefer response.cost_usd for accurate per-call tracking
+        if hasattr(response, 'cost_usd') and isinstance(response.cost_usd, (int, float)):
+            self._total_cost += float(response.cost_usd)
+        # Fallback: use difference in LLM client's cumulative cost
         elif hasattr(self.llm_client, 'get_cost') and callable(self.llm_client.get_cost):
-            cost_value = self.llm_client.get_cost()
-        if not isinstance(cost_value, (int, float)):
-            return
-        self._total_cost += float(cost_value)
+            # Track the last known LLM client cost to compute delta
+            if not hasattr(self, '_last_llm_cost'):
+                self._last_llm_cost = 0.0
+            current_llm_cost = self.llm_client.get_cost()
+            if isinstance(current_llm_cost, (int, float)):
+                delta = float(current_llm_cost) - self._last_llm_cost
+                if delta > 0:
+                    self._total_cost += delta
+                    self._last_llm_cost = current_llm_cost
 
     def _ensure_budget(self, allow_equal: bool = False) -> None:
         """Ensure cost budget has not been exceeded."""
