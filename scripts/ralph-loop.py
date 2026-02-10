@@ -66,18 +66,7 @@ def run_iteration(iteration: int, max_iterations: int = 0) -> bool:
     log(f"Working on: {spec_name}")
     
     # Check for beads if no specs
-    try:
-        result = subprocess.run(
-            ["bd", "ready"],
-            capture_output=True,
-            text=True,
-            cwd=PROJECT_DIR
-        )
-        if result.returncode == 0 and result.stdout.strip():
-            log("Beads ready for work:")
-            print(result.stdout)
-    except FileNotFoundError:
-        log("bd CLI not found, skipping bead check")
+    log("Run 'bd ready' manually to see bead status")
     
     # Read constitution and prompt
     constitution_text = ""
