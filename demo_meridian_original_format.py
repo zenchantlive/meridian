@@ -14,9 +14,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from brain.scripts import (
     # Original MERIDIAN format
     load_meridian_config,
-    activate_mode,
-    parse_slider_command,
-    MeridianConfig,
     # New memory system
     ChunkStore,
     RememberOperation,

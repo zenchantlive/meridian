@@ -24,12 +24,11 @@ try:
         sys.path.insert(0, str(script_dir))
     
     from repl_environment import REPLSession, CostBudgetExceededError
-    from llm_client import LLMClient, LLMResponse, LLMBudgetExceededError
+    from llm_client import LLMClient, LLMBudgetExceededError
 except ImportError as e:
     REPLSession = None
     CostBudgetExceededError = None
     LLMClient = None
-    LLMResponse = None
     LLMBudgetExceededError = None
 
 

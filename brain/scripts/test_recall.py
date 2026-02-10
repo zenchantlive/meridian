@@ -17,22 +17,19 @@ Test Philosophy (Linus Style):
 """
 
 import unittest
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock
 import tempfile
 import shutil
-from pathlib import Path
 
 # Handle both relative and direct imports
 try:
-    from brain.scripts.memory_store import ChunkStore, Chunk
+    from brain.scripts.memory_store import ChunkStore
     from brain.scripts.remember_operation import RememberOperation
     from brain.scripts.recall_operation import RecallOperation, RecallResult
-    from brain.scripts.repl_environment import REPLSession
 except ImportError:
-    from memory_store import ChunkStore, Chunk
+    from memory_store import ChunkStore
     from remember_operation import RememberOperation
     from recall_operation import RecallOperation, RecallResult
-    from repl_environment import REPLSession
 
 
 class TestRecallBasic(unittest.TestCase):
@@ -123,7 +120,7 @@ class TestRecallBasic(unittest.TestCase):
         
         result = self.recall.recall("Tell me about Python preferences")
         
-        self.assertTrue(len(result.source_chunks) > 0)
+        self.assertGreater(len(result.source_chunks), 0)
         self.assertIn("python", result.answer.lower())
     
     def test_recall_no_matches(self):

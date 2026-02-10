@@ -425,6 +425,9 @@ class REPLSession:
         except CostBudgetExceededError:
             # Let budget errors propagate
             raise
+        except Exception as e:
+            # Wrap unexpected exceptions with context about LLM query
+            raise RuntimeError(f"LLM query failed: {str(e)}") from e
         finally:
             # Decrement depth counter
             with self._lock:
@@ -716,10 +719,12 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
                 self._last_llm_cost = 0.0
             current_llm_cost = self.llm_client.get_cost()
             if isinstance(current_llm_cost, (int, float)):
-                delta = float(current_llm_cost) - self._last_llm_cost
+                current_llm_cost = float(current_llm_cost)
+                delta = current_llm_cost - self._last_llm_cost
                 if delta > 0:
                     self._total_cost += delta
-                    self._last_llm_cost = current_llm_cost
+                # Always update last known cost to handle resets/decreases
+                self._last_llm_cost = current_llm_cost
 
     def _ensure_budget(self, allow_equal: bool = False) -> None:
         """Ensure cost budget has not been exceeded."""

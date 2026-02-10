@@ -4,9 +4,8 @@ High-level memory retrieval using RLM-based natural language queries.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import List, Dict, Any
 import time
-from pathlib import Path
 
 # Handle both relative and direct imports
 try:
@@ -242,8 +241,6 @@ Be thorough but efficient. Consider chunk confidence scores."""
                 query=retrieval_prompt,
                 max_iterations=self.max_iterations
             )
-            
-            elapsed = time.time() - start_time
             
             # If no answer, return empty result
             if answer is None:

@@ -4,7 +4,6 @@ D3.3: Memory analysis and synthesis tests
 """
 
 import unittest
-from unittest.mock import Mock
 import tempfile
 import shutil
 

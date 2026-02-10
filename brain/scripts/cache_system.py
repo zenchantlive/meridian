@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 from typing import Dict, Any, Optional
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from threading import Lock
 
 
@@ -208,6 +208,7 @@ class DiskCache:
                     cache_file.unlink()
                     removed += 1
             except (json.JSONDecodeError, IOError):
+                # Ignore malformed or unreadable cache files during cleanup; cleanup is best-effort.
                 pass
         
         return removed

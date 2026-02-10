@@ -4,7 +4,6 @@ Reads personalities, sliders, and generates LIVEHUD output.
 """
 
 import re
-import os
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
