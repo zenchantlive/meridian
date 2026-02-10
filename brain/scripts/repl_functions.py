@@ -6,6 +6,9 @@ Memory access functions available within the REPL sandbox.
 from typing import Dict, Any, List, Optional
 
 
+import re
+
+
 def read_chunk(chunk_id: str, chunk_store) -> Optional[Dict[str, Any]]:
     """
     Read a chunk by ID.
@@ -17,6 +20,18 @@ def read_chunk(chunk_id: str, chunk_store) -> Optional[Dict[str, Any]]:
     Returns:
         Chunk data dict or None if not found
     """
+    # Validate chunk_id format - reject path traversal attempts
+    if chunk_id is None:
+        return None
+    
+    # Check for path traversal patterns
+    if '..' in chunk_id or '/' in chunk_id or '\\' in chunk_id:
+        return None
+    
+    # Only allow alphanumeric, hyphens, and underscores
+    if not re.match(r'^[a-zA-Z0-9_-]+$', chunk_id):
+        return None
+    
     try:
         chunk = chunk_store.get_chunk(chunk_id)
         if chunk is None:
@@ -76,19 +91,24 @@ def search_chunks(query: str, chunk_store, limit: int = 10) -> List[str]:
         return []
 
 
-def list_chunks_by_tag(tag: str, chunk_store) -> List[str]:
+def list_chunks_by_tag(tags, chunk_store) -> List[str]:
     """
-    List all chunks with a given tag.
+    List all chunks with given tag(s).
     
     Args:
-        tag: Tag to search for
+        tags: Single tag string or list of tags to search for
         chunk_store: ChunkStore instance
         
     Returns:
-        List of chunk IDs with the tag
+        List of chunk IDs with the tag(s)
     """
     try:
-        return chunk_store.list_chunks(tags=[tag])
+        # Handle single tag or list of tags
+        if isinstance(tags, str):
+            return chunk_store.list_chunks(tags=[tags])
+        elif isinstance(tags, list):
+            return chunk_store.list_chunks(tags=tags)
+        return []
     except Exception:
         return []
 

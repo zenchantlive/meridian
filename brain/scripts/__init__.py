@@ -22,6 +22,13 @@ from .auto_linker import (
     calculate_link_strength
 )
 from .remember_operation import RememberOperation
+from .llm_client import (
+    LLMClient,
+    LLMResponse,
+    LLMError,
+    LLMTransientError,
+    LLMPermanentError
+)
 
 # REPL Environment (D1.3)
 try:
@@ -60,6 +67,12 @@ __all__ = [
     "calculate_link_strength",
     # Remember operation
     "RememberOperation",
+    # LLM Wrapper (D2.1)
+    "LLMClient",
+    "LLMResponse",
+    "LLMError",
+    "LLMTransientError",
+    "LLMPermanentError",
     # REPL Environment (D1.3)
     "REPLSession",
     "FINAL",
