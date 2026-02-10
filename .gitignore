@@ -1,8 +1,28 @@
 # bv (beads viewer) local config and caches
 .bv/
 
-# Claude orchestration
+# Beads - only keep essential tracking, ignore runtime
+.beads/export-state/
+
+# Agent tool directories (user-specific)
+.agent/
+.agents/
+.augment/
+.cline/
+.openhands/
+.perles/
+
+# Local skills (copies of external skills)
+skills/
+
+# Temporary directories
+.rlm_temp/
 .worktrees/
+
+# Original repo reference (if cloned)
+original_repo/
+
+# Claude orchestration logs
 .claude/hooks/*.log
 
 # Design docs (epic specs)
@@ -26,3 +46,7 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Test temp files
+*.tmp
+*.temp
