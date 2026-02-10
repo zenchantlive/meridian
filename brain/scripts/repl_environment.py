@@ -327,7 +327,7 @@ class REPLSession:
                         if hasattr(builtins, name)}
         
         # Inject memory functions
-        from repl_functions import read_chunk, search_chunks, list_chunks_by_tag, get_linked_chunks
+        from brain.scripts.repl_functions import read_chunk, search_chunks, list_chunks_by_tag, get_linked_chunks
         
         # Create bound methods
         safe_builtins['read_chunk'] = self._read_chunk_wrapper
