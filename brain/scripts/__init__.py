@@ -23,6 +23,26 @@ from .auto_linker import (
 )
 from .remember_operation import RememberOperation
 
+# REPL Environment (D1.3)
+try:
+    from .repl_environment import (
+        REPLSession,
+        FINAL,
+        llm_query,
+        SandboxViolation,
+        MaxIterationsError,
+        TimeoutError
+    )
+    from .repl_functions import (
+        read_chunk,
+        search_chunks,
+        list_chunks_by_tag,
+        get_linked_chunks
+    )
+    _REPL_AVAILABLE = True
+except ImportError:
+    _REPL_AVAILABLE = False
+
 __all__ = [
     # Memory store
     "ChunkStore",
@@ -39,5 +59,15 @@ __all__ = [
     "create_chunk_with_links",
     "calculate_link_strength",
     # Remember operation
-    "RememberOperation"
+    "RememberOperation",
+    # REPL Environment (D1.3)
+    "REPLSession",
+    "FINAL",
+    "SandboxViolation",
+    "MaxIterationsError",
+    "TimeoutError",
+    "read_chunk",
+    "search_chunks",
+    "list_chunks_by_tag",
+    "get_linked_chunks",
 ]
