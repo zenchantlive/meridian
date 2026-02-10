@@ -1,0 +1,25 @@
+{
+  "id": "chunk-2026-02-10-dce4df6e",
+  "content": "Preferences noted:\n- I prefer using type hints throughout the codebase\n- I like async patterns for I/O operations\n- I want comprehensive test coverage",
+  "tokens": 30,
+  "type": "preference",
+  "metadata": {
+    "created": "2026-02-10T06:05:49.372377Z",
+    "conversation_id": "demo-conv-001",
+    "source": "interaction",
+    "confidence": 0.7,
+    "access_count": 0,
+    "last_accessed": null
+  },
+  "links": {
+    "context_of": [],
+    "follows": [],
+    "related_to": [],
+    "supports": [],
+    "contradicts": []
+  },
+  "tags": [
+    "demo",
+    "d1-2"
+  ]
+}

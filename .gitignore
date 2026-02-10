@@ -1,0 +1,28 @@
+# bv (beads viewer) local config and caches
+.bv/
+
+# Claude orchestration
+.worktrees/
+.claude/hooks/*.log
+
+# Design docs (epic specs)
+.designs/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

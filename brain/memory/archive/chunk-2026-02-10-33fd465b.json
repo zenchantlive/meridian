@@ -1,0 +1,25 @@
+{
+  "id": "chunk-2026-02-10-33fd465b",
+  "content": "We decided to implement the chunking engine using a simple bounded semantic strategy. This approach balances complexity with effectiveness.",
+  "tokens": 22,
+  "type": "decision",
+  "metadata": {
+    "created": "2026-02-10T06:05:49.369556Z",
+    "conversation_id": "demo-conv-001",
+    "source": "interaction",
+    "confidence": 0.7,
+    "access_count": 0,
+    "last_accessed": null
+  },
+  "links": {
+    "context_of": [],
+    "follows": [],
+    "related_to": [],
+    "supports": [],
+    "contradicts": []
+  },
+  "tags": [
+    "demo",
+    "d1-2"
+  ]
+}

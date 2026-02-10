@@ -1,0 +1,16 @@
+{
+  "project_name": "meridian",
+  "orchestration": {
+    "enabled": true,
+    "worktree_base": ".worktrees",
+    "default_agents": ["scout", "detective", "architect", "scribe", "code-reviewer"],
+    "hooks": {
+      "pre_dispatch": [".claude/hooks/enforce-bead-for-supervisor.sh", ".claude/hooks/enforce-sequential-dispatch.sh"],
+      "pre_complete": [".claude/hooks/validate-completion.sh"]
+    }
+  },
+  "beads": {
+    "kanban_ui": true,
+    "auto_worktrees": true
+  }
+}
