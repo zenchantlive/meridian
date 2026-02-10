@@ -22,6 +22,8 @@ from .auto_linker import (
     calculate_link_strength
 )
 from .remember_operation import RememberOperation
+from .recall_operation import RecallOperation, RecallResult
+from .reason_operation import ReasonOperation, ReasonResult
 from .llm_client import (
     LLMClient,
     LLMResponse,
@@ -69,6 +71,12 @@ __all__ = [
     "calculate_link_strength",
     # Remember operation
     "RememberOperation",
+    # Recall operation
+    "RecallOperation",
+    "RecallResult",
+    # Reason operation
+    "ReasonOperation",
+    "ReasonResult",
     # LLM Wrapper (D2.1)
     "LLMClient",
     "LLMResponse",
