@@ -44,6 +44,12 @@ class LLMPermanentError(LLMError):
         super().__init__(message, provider=provider, retries=retries, is_transient=False)
 
 
+class LLMBudgetExceededError(LLMError):
+    """Raised when LLM budget is exceeded."""
+    def __init__(self, message: str, provider: str = "unknown", retries: int = 0):
+        super().__init__(message, provider=provider, retries=retries, is_transient=False)
+
+
 class LLMClient:
     """Standardized LLM client with retry and usage tracking."""
     _DEFAULT_MODELS = {
@@ -72,7 +78,8 @@ class LLMClient:
         backoff_base: float = 1.0,
         sleep_fn=time.sleep,
         mock_sequence: Optional[List[Any]] = None,
-        rate_table: Optional[Dict[str, Dict[str, float]]] = None
+        rate_table: Optional[Dict[str, Dict[str, float]]] = None,
+        max_cost_usd: Optional[float] = None
     ):
         self.provider = provider.lower()
         if self.provider not in self._DEFAULT_MODELS:
@@ -88,6 +95,7 @@ class LLMClient:
         self.sleep_fn = sleep_fn
         self._mock_sequence = list(mock_sequence) if mock_sequence is not None else []
         self._rate_table = rate_table or self._DEFAULT_RATES
+        self._max_cost_usd = max_cost_usd
         self._usage = {
             "calls": 0,
             "input_tokens": 0,
@@ -119,6 +127,20 @@ class LLMClient:
         message = str(error).lower()
         return any(keyword in message for keyword in ("rate limit", "timeout", "temporarily"))
 
+    def _ensure_budget(self, allow_equal: bool = False) -> None:
+        if self._max_cost_usd is None:
+            return
+        total_cost = self._usage["total_cost_usd"]
+        if allow_equal:
+            over_budget = total_cost > self._max_cost_usd
+        else:
+            over_budget = total_cost >= self._max_cost_usd
+        if over_budget:
+            raise LLMBudgetExceededError(
+                f"Cost budget exceeded: total_cost={total_cost:.6f} budget={self._max_cost_usd:.6f}",
+                provider=self.provider
+            )
+
     def _mock_complete(self, prompt: str) -> str:
         if self._mock_sequence:
             next_item = self._mock_sequence.pop(0)
@@ -140,6 +162,7 @@ class LLMClient:
 
         while True:
             try:
+                self._ensure_budget()
                 text = self._complete_provider(prompt, **kwargs)
                 input_tokens = self._count_tokens(prompt)
                 output_tokens = self._count_tokens(text)
@@ -158,8 +181,11 @@ class LLMClient:
                     model=self.model
                 )
                 self._record_usage(response)
+                self._ensure_budget(allow_equal=True)
                 return response
             except Exception as exc:
+                if isinstance(exc, LLMBudgetExceededError):
+                    raise
                 if not self._is_transient_error(exc):
                     raise LLMError(
                         str(exc),
@@ -187,5 +213,19 @@ class LLMClient:
         self._usage["total_tokens"] += response.total_tokens
         self._usage["total_cost_usd"] += response.cost_usd
 
+    def get_cost(self) -> float:
+        return float(self._usage["total_cost_usd"])
+
     def get_usage_stats(self) -> Dict[str, Any]:
         return dict(self._usage)
+
+    def get_budget_status(self) -> Dict[str, Any]:
+        total = float(self._usage["total_cost_usd"])
+        budget = self._max_cost_usd
+        remaining = None if budget is None else max(0.0, budget - total)
+        return {
+            "total_cost_usd": total,
+            "budget_usd": budget,
+            "remaining_usd": remaining,
+            "over_budget": budget is not None and total > budget
+        }

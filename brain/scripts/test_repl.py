@@ -557,6 +557,18 @@ class TestRetrieveWorkflow(unittest.TestCase):
         
         self.assertEqual(result, "User likes Python")
         self.assertEqual(self.repl.iteration_count, 2)
+
+    def test_retrieve_tracks_cost(self):
+        """retrieve() should track LLM cost."""
+        response = Mock()
+        response.text = "FINAL('Python')"
+        response.cost_usd = 0.005
+        self.mock_llm.complete = Mock(return_value=response)
+        
+        result = self.repl.retrieve("What language does the user like?")
+        
+        self.assertEqual(result, "Python")
+        self.assertEqual(self.repl.total_cost, 0.005)
     
     def test_max_iterations_timeout(self):
         """Should return None if max_iterations reached without FINAL()."""
@@ -837,6 +849,19 @@ class TestCostTracking(unittest.TestCase):
         self.repl.execute('llm_query("q2")')
         
         self.assertEqual(self.repl.total_cost, 0.004)
+
+    def test_budget_exceeded(self):
+        """Should signal when budget is exceeded."""
+        budgeted_repl = REPLSession(
+            chunk_store=self.mock_store,
+            llm_client=self.mock_llm,
+            max_cost_usd=0.003
+        )
+        budgeted_repl.execute('llm_query("q1")')
+        result = budgeted_repl.execute('llm_query("q2")')
+        
+        self.assertIn("budget", str(result).lower())
+        self.assertGreater(budgeted_repl.total_cost, 0.003)
     
     def test_get_cost_breakdown(self):
         """Should provide cost breakdown."""

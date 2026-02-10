@@ -24,6 +24,12 @@ class MaxIterationsError(Exception):
     pass
 
 
+# Cost budget exceeded
+class CostBudgetExceededError(RuntimeError):
+    """Raised when cost budget is exceeded."""
+    pass
+
+
 # Use built-in TimeoutError
 
 
@@ -274,7 +280,8 @@ class REPLSession:
             raise AttributeError(f"sys.{name} is not available in sandbox")
     
     def __init__(self, chunk_store=None, llm_client=None, 
-                 max_iterations: int = 10, timeout_seconds: int = 60, max_depth: int = 5):
+                 max_iterations: int = 10, timeout_seconds: int = 60, max_depth: int = 5,
+                 max_cost_usd: Optional[float] = None):
         """
         Initialize REPL session.
         
@@ -295,6 +302,7 @@ class REPLSession:
         self.max_iterations = max_iterations
         self.timeout_seconds = timeout_seconds
         self.max_depth = max_depth
+        self._max_cost_usd = max_cost_usd
         
         self._state: Dict[str, Any] = {}  # User state (empty initially)
         self._iteration_count = 0
@@ -381,6 +389,7 @@ class REPLSession:
             self._current_depth += 1
         
         try:
+            self._ensure_budget()
             # Build full prompt with context
             full_prompt = prompt
             if context:
@@ -403,12 +412,8 @@ class REPLSession:
             # Call LLM
             response = self.llm_client.complete(full_prompt)
             
-            # Track cost if available on response
-            if hasattr(response, 'cost_usd'):
-                self._total_cost += response.cost_usd
-            # Also check if client has get_cost method for mock compatibility
-            elif hasattr(self.llm_client, 'get_cost') and callable(self.llm_client.get_cost):
-                self._total_cost += self.llm_client.get_cost()
+            self._record_cost(response)
+            self._ensure_budget(allow_equal=True)
             
             return response.text if hasattr(response, 'text') else str(response)
         except (RecursionError, MaxIterationsError):
@@ -462,11 +467,19 @@ class REPLSession:
     
     def get_cost_breakdown(self) -> Dict[str, Any]:
         """Get detailed cost breakdown."""
-        return {
+        breakdown = {
             "total": self._total_cost,
             "calls": self._iteration_count,
             "per_call_average": self._total_cost / self._iteration_count if self._iteration_count > 0 else 0.0
         }
+        if self._max_cost_usd is not None:
+            remaining = self._max_cost_usd - self._total_cost
+            breakdown.update({
+                "budget": self._max_cost_usd,
+                "remaining": max(0.0, remaining),
+                "over_budget": self._total_cost > self._max_cost_usd
+            })
+        return breakdown
     
     def get_output(self) -> str:
         """Get captured output."""
@@ -650,8 +663,11 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
             
             # Get LLM response
             try:
+                self._ensure_budget()
                 response = self.llm_client.complete(retrieval_prompt)
                 code = response.text if hasattr(response, 'text') else str(response)
+                self._record_cost(response)
+                self._ensure_budget(allow_equal=True)
             except Exception as e:
                 # API error - return error message
                 return f"Error: {str(e)}"
@@ -683,6 +699,30 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
         self._output = []
         self._stderr = []
         self._setup_namespace()
+
+    def _record_cost(self, response: Any) -> None:
+        """Record cost from response or LLM client."""
+        cost_value = None
+        if hasattr(response, 'cost_usd'):
+            cost_value = response.cost_usd
+        elif hasattr(self.llm_client, 'get_cost') and callable(self.llm_client.get_cost):
+            cost_value = self.llm_client.get_cost()
+        if not isinstance(cost_value, (int, float)):
+            return
+        self._total_cost += float(cost_value)
+
+    def _ensure_budget(self, allow_equal: bool = False) -> None:
+        """Ensure cost budget has not been exceeded."""
+        if self._max_cost_usd is None:
+            return
+        if allow_equal:
+            over_budget = self._total_cost > self._max_cost_usd
+        else:
+            over_budget = self._total_cost >= self._max_cost_usd
+        if over_budget:
+            raise CostBudgetExceededError(
+                f"Cost budget exceeded: total_cost={self._total_cost:.6f} budget={self._max_cost_usd:.6f}"
+            )
     
     def __enter__(self):
         """Context manager entry."""

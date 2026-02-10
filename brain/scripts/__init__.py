@@ -27,7 +27,8 @@ from .llm_client import (
     LLMResponse,
     LLMError,
     LLMTransientError,
-    LLMPermanentError
+    LLMPermanentError,
+    LLMBudgetExceededError
 )
 
 # REPL Environment (D1.3)
@@ -38,7 +39,8 @@ try:
         llm_query,
         SandboxViolation,
         MaxIterationsError,
-        TimeoutError
+        TimeoutError,
+        CostBudgetExceededError
     )
     from .repl_functions import (
         read_chunk,
@@ -73,12 +75,14 @@ __all__ = [
     "LLMError",
     "LLMTransientError",
     "LLMPermanentError",
+    "LLMBudgetExceededError",
     # REPL Environment (D1.3)
     "REPLSession",
     "FINAL",
     "SandboxViolation",
     "MaxIterationsError",
     "TimeoutError",
+    "CostBudgetExceededError",
     "read_chunk",
     "search_chunks",
     "list_chunks_by_tag",
