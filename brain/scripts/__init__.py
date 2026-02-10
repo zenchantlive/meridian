@@ -24,6 +24,7 @@ from .auto_linker import (
 from .remember_operation import RememberOperation
 from .recall_operation import RecallOperation, RecallResult
 from .reason_operation import ReasonOperation, ReasonResult
+from .cache_system import MemoryCache, DiskCache, CacheManager
 from .llm_client import (
     LLMClient,
     LLMResponse,
@@ -77,6 +78,10 @@ __all__ = [
     # Reason operation
     "ReasonOperation",
     "ReasonResult",
+    # Cache system
+    "MemoryCache",
+    "DiskCache",
+    "CacheManager",
     # LLM Wrapper (D2.1)
     "LLMClient",
     "LLMResponse",
