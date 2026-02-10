@@ -8,8 +8,8 @@
     "conversation_id": "test-conv-001",
     "source": "interaction",
     "confidence": 0.9,
-    "access_count": 1,
-    "last_accessed": "2026-02-10T05:40:02.374538Z"
+    "access_count": 18,
+    "last_accessed": "2026-02-10T22:11:58.474235Z"
   },
   "links": {
     "context_of": [],

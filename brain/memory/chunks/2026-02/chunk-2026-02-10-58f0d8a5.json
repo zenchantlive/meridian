@@ -1,0 +1,51 @@
+{
+  "id": "chunk-2026-02-10-58f0d8a5",
+  "content": "Memory operations: REMEMBER (D3.1), RECALL (D3.2), REASON (D3.3) all implemented",
+  "tokens": 29,
+  "type": "fact",
+  "metadata": {
+    "created": "2026-02-10T22:09:14.174550Z",
+    "conversation_id": "project-knowledge",
+    "source": "interaction",
+    "confidence": 0.95,
+    "access_count": 7,
+    "last_accessed": "2026-02-10T22:11:58.572361Z"
+  },
+  "links": {
+    "context_of": [
+      "chunk-2026-02-10-222d1698",
+      "chunk-2026-02-10-f5afd75a",
+      "chunk-2026-02-10-6225b28f",
+      "chunk-2026-02-10-2a6b6d9f",
+      "chunk-2026-02-10-e1497811",
+      "chunk-2026-02-10-fd1a83b7",
+      "chunk-2026-02-10-182464c2",
+      "chunk-2026-02-10-a955b434",
+      "chunk-2026-02-10-2c703397",
+      "chunk-2026-02-10-6fbafa51",
+      "chunk-2026-02-10-a71054e2",
+      "chunk-2026-02-10-96df1b08",
+      "chunk-2026-02-10-9ae3167c"
+    ],
+    "follows": [
+      "chunk-2026-02-10-222d1698",
+      "chunk-2026-02-10-f5afd75a",
+      "chunk-2026-02-10-6225b28f",
+      "chunk-2026-02-10-2a6b6d9f",
+      "chunk-2026-02-10-e1497811",
+      "chunk-2026-02-10-fd1a83b7",
+      "chunk-2026-02-10-182464c2",
+      "chunk-2026-02-10-a955b434",
+      "chunk-2026-02-10-2c703397",
+      "chunk-2026-02-10-6fbafa51",
+      "chunk-2026-02-10-a71054e2"
+    ],
+    "related_to": [],
+    "supports": [],
+    "contradicts": []
+  },
+  "tags": [
+    "features",
+    "operations"
+  ]
+}

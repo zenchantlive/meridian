@@ -34,6 +34,18 @@ from .llm_client import (
     LLMBudgetExceededError
 )
 
+# Original MERIDIAN format (personalities, sliders, LIVEHUD)
+from .original_meridian import (
+    MeridianConfig,
+    SliderConfig,
+    PersonalityMode,
+    MemoryProtocol,
+    SystemState,
+    load_meridian_config,
+    activate_mode,
+    parse_slider_command
+)
+
 # REPL Environment (D1.3)
 try:
     from .repl_environment import (
@@ -100,4 +112,13 @@ __all__ = [
     "search_chunks",
     "list_chunks_by_tag",
     "get_linked_chunks",
+    # Original MERIDIAN format
+    "MeridianConfig",
+    "SliderConfig",
+    "PersonalityMode",
+    "MemoryProtocol",
+    "SystemState",
+    "load_meridian_config",
+    "activate_mode",
+    "parse_slider_command",
 ]

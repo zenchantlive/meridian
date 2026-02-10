@@ -105,6 +105,47 @@ class RecallOperation:
         # Use REPL for intelligent retrieval
         return self._repl_retrieval(query, conversation_id, max_results, min_confidence)
     
+    # Query expansion synonyms for common concepts
+    QUERY_SYNONYMS = {
+        # Task/Project management
+        'task': ['task', 'bead', 'issue', 'work item', 'todo'],
+        'tracking': ['tracking', 'management', 'organization', 'workflow'],
+        'beads': ['beads', 'tasks', 'issues', 'tickets'],
+        
+        # Memory
+        'memory': ['memory', 'storage', 'remember', 'recall', 'chunk'],
+        'remember': ['remember', 'store', 'save', 'record'],
+        
+        # Project
+        'project': ['project', 'meridian', 'system', 'brain'],
+        'status': ['status', 'state', 'progress', 'complete', 'done'],
+        
+        # Architecture
+        'architecture': ['architecture', 'design', 'structure', 'system'],
+        'components': ['components', 'parts', 'modules', 'pieces'],
+        
+        # Testing
+        'test': ['test', 'testing', 'validate', 'verify', 'pytest'],
+        
+        # Files
+        'file': ['file', 'document', 'code', 'script'],
+        'format': ['format', 'structure', 'layout', 'style'],
+    }
+    
+    def _expand_query(self, query: str) -> List[str]:
+        """Expand query with synonyms for better matching."""
+        query_lower = query.lower()
+        terms = set(query_lower.split())
+        
+        # Add synonyms for each term
+        expanded = set(terms)
+        for term in list(terms):
+            for key, synonyms in self.QUERY_SYNONYMS.items():
+                if term == key or term in synonyms:
+                    expanded.update(synonyms)
+        
+        return list(expanded)
+    
     def _basic_search(
         self,
         query: str,
@@ -121,11 +162,12 @@ class RecallOperation:
             # Search all chunks
             chunk_ids = self.chunk_store.list_chunks()
         
-        # Simple keyword matching
-        query_terms = query.lower().split()
+        # Expand query with synonyms for better matching
+        query_terms = self._expand_query(query)
         matches = []
         
-        for chunk_id in chunk_ids[:max_results * 3]:  # Check more for relevance
+        # Check ALL chunks (not just first N) to find best matches
+        for chunk_id in chunk_ids:
             chunk = self.chunk_store.get_chunk(chunk_id)
             if chunk is None:
                 continue
