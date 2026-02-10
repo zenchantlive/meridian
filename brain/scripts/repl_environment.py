@@ -416,11 +416,14 @@ class REPLSession:
             self._ensure_budget(allow_equal=True)
             
             return response.text if hasattr(response, 'text') else str(response)
-        except (RecursionError, MaxIterationsError, CostBudgetExceededError):
-            # Don't catch these - let them propagate
+        except RecursionError:
+            # Let RecursionError propagate for depth limit testing
             raise
-        except Exception as e:
-            # Re-raise all other errors - don't swallow them
+        except MaxIterationsError:
+            # Let MaxIterationsError propagate for iteration limit testing
+            raise
+        except CostBudgetExceededError:
+            # Let budget errors propagate
             raise
         finally:
             # Decrement depth counter
@@ -663,8 +666,11 @@ Write Python code to solve this query. Use FINAL('your answer') when done."""
                 code = response.text if hasattr(response, 'text') else str(response)
                 self._record_cost(response)
                 self._ensure_budget(allow_equal=True)
-            except (CostBudgetExceededError, MaxIterationsError):
-                # Budget/iteration errors should propagate
+            except CostBudgetExceededError:
+                # Budget errors should propagate
+                raise
+            except MaxIterationsError:
+                # Iteration errors should propagate  
                 raise
             except Exception as e:
                 # API error - raise instead of returning error string
