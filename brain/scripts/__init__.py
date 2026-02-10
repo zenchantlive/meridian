@@ -22,6 +22,9 @@ from .auto_linker import (
     calculate_link_strength
 )
 from .remember_operation import RememberOperation
+from .recall_operation import RecallOperation, RecallResult
+from .reason_operation import ReasonOperation, ReasonResult
+from .cache_system import MemoryCache, DiskCache, CacheManager
 from .llm_client import (
     LLMClient,
     LLMResponse,
@@ -29,6 +32,18 @@ from .llm_client import (
     LLMTransientError,
     LLMPermanentError,
     LLMBudgetExceededError
+)
+
+# Original MERIDIAN format (personalities, sliders, LIVEHUD)
+from .original_meridian import (
+    MeridianConfig,
+    SliderConfig,
+    PersonalityMode,
+    MemoryProtocol,
+    SystemState,
+    load_meridian_config,
+    activate_mode,
+    parse_slider_command
 )
 
 # REPL Environment (D1.3)
@@ -69,6 +84,16 @@ __all__ = [
     "calculate_link_strength",
     # Remember operation
     "RememberOperation",
+    # Recall operation
+    "RecallOperation",
+    "RecallResult",
+    # Reason operation
+    "ReasonOperation",
+    "ReasonResult",
+    # Cache system
+    "MemoryCache",
+    "DiskCache",
+    "CacheManager",
     # LLM Wrapper (D2.1)
     "LLMClient",
     "LLMResponse",
@@ -87,4 +112,13 @@ __all__ = [
     "search_chunks",
     "list_chunks_by_tag",
     "get_linked_chunks",
+    # Original MERIDIAN format
+    "MeridianConfig",
+    "SliderConfig",
+    "PersonalityMode",
+    "MemoryProtocol",
+    "SystemState",
+    "load_meridian_config",
+    "activate_mode",
+    "parse_slider_command",
 ]

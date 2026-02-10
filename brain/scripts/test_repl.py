@@ -827,9 +827,15 @@ class TestCostTracking(unittest.TestCase):
         self.temp_dir = tempfile.mkdtemp()
         self.mock_store = Mock()
         
+        # Create realistic mock response with cost_usd attribute
+        def make_response(text, cost=0.002):
+            response = Mock()
+            response.text = text
+            response.cost_usd = cost
+            return response
+        
         self.mock_llm = Mock()
-        self.mock_llm.complete = Mock(return_value="FINAL('answer')")
-        self.mock_llm.get_cost = Mock(return_value=0.002)
+        self.mock_llm.complete = Mock(return_value=make_response("FINAL('answer')", 0.002))
         
         self.repl = REPLSession(
             chunk_store=self.mock_store,
