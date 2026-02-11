@@ -69,6 +69,17 @@ skills/beads/
 skills/create-beads-orchestration/
 skills/ralph-wiggum/
 
+# Local agent runtime files (keep only meridian-guide skill tracked)
+.agents/.skill-lock.json
+.agents/roster.md
+.agents/skills/*
+!.agents/skills/meridian-guide/
+!.agents/skills/meridian-guide/**
+.agents/skills/meridian-guide/__pycache__/
+.agents/skills/meridian-guide/brain/
+.beads/export-state/
+verify_live_test.py
+
 # Demo outputs
 demo_*.html
 demo_*.png
