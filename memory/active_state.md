@@ -35,7 +35,7 @@
 ## 🔗 Verifiable Context
 *   **PRD:** `meridian-prd/PRD.md` (Source of Truth)
 *   **Memory Spec:** `meridian-prd/PRD-MEMORY.md`
-*   **Chunk Schema:** `brain/memory/SCHEMA.md`
+*   **Chunk Schema:** `brain/MEMORY_SCHEMA.md`
 *   **Tests:** `brain/scripts/test_*.py`
 
 ## 🛑 "Do Not Forget" (Landmines)
@@ -71,3 +71,4 @@
 - Tests and implementation properly separated
 - All modules export via `brain/scripts/__init__.py`
 - Ready for pip package structure
+

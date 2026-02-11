@@ -7,6 +7,8 @@ This demonstrates the personalities, sliders, and gauge dashboard.
 import tempfile
 import os
 import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # Add the project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -33,12 +35,12 @@ print("=" * 70)
 # ============================================================================
 
 print("\n" + "-" * 70)
-print("PART 1: Original MERIDIAN Format (from original_repo/brain/)")
+print("PART 1: Original MERIDIAN Format (from brain/)")
 print("─" * 70)
 
 # Load the configuration from original repo
 print("\n[1] Loading MERIDIAN configuration from Markdown files...")
-config = load_meridian_config("original_repo/brain")
+config = load_meridian_config("brain")
 print("    [OK] Configuration loaded")
 print(f"    - Personalities found: {list(config.personalities.keys())}")
 print(f"    - Sliders configured: {list(config.sliders.keys())}")
@@ -222,3 +224,4 @@ print("\n" + "=" * 70)
 print("The original MERIDIAN format (LIVEHUD, personalities, sliders)")
 print("is fully functional alongside the new RLM memory system.")
 print("=" * 70)
+

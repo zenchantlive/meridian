@@ -95,7 +95,7 @@ Query → REPLSession → LLM → Memory Functions → Results
 | Personalities | Behavioral mode definitions | `brain/personalities/*.md` |
 | Sliders | Configuration dimension controls | `brain/sliders/*.md` |
 | Gauges | Live system monitoring | `brain/gauges/LIVEHUD.md` |
-| Memory Protocol | Original memory system | `brain/memory/MEMORY_PROTOCOL.md` |
+| Memory Protocol | Original memory system | `brain/MEMORY_PROTOCOL_LEGACY.md` |
 
 **Key Insight:** The original framework uses **Markdown-based configuration** while the enhanced system uses **JSON-based storage**. They complement each other - personalities/sliders configure *behavior*, while the new memory system provides *persistent storage*.
 
@@ -575,7 +575,7 @@ class ConfiguredAgent:
 
 **Detailed Documentation:**
 - Architecture: See [references/ARCHITECTURE.md](references/ARCHITECTURE.md)
-- Memory Schema: See `brain/memory/SCHEMA.md`
+- Memory Schema: See `brain/MEMORY_SCHEMA.md`
 - API Reference: See [references/API.md](references/API.md)
 - Personality Specs: See `brain/personalities/*.md`
 - Slider Specs: See `brain/sliders/*.md`
@@ -623,3 +623,4 @@ class ConfiguredAgent:
 ---
 
 **Remember**: MERIDIAN Brain is a **framework**, not just a library. It provides structure for agent memory and behavior. Start simple (basic memory operations), then progressively adopt personalities, sliders, and advanced features as needed.
+

@@ -1,53 +1,74 @@
-# bv (beads viewer) local config and caches
-.bv/
-
-# Beads - only keep essential tracking, ignore runtime
-.beads/export-state/
-
-# Agent tool directories (user-specific)
-.agent/
-.agents/
-.augment/
-.cline/
-.openhands/
-.perles/
-
-
-# Local skills (copies of external skills)
-skills/
-
-# Temporary directories
-.rlm_temp/
-.worktrees/
-
-# Original repo reference (if cloned)
-original_repo/
-
-# Claude orchestration logs
-.claude/hooks/*.log
-
-# Design docs (epic specs)
-.designs/
-
-# Node
-node_modules/
+# MERIDIAN Brain Enhanced - Git Ignore
 
 # Python
 __pycache__/
-*.pyc
-.venv/
-venv/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# IDE
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Test temp files
+# MERIDIAN-specific
+# Memory storage (user data, not code)
+brain/memory/
+
+# Original repo reference (we copied what we need to brain/)
+original_repo/
+
+# Temp test files
+temp/
+tmp/
 *.tmp
-*.temp
+
+# Agent workspaces (not part of the main project)
+.agent/
+.augment/
+.claude/
+.cline/
+.openhands/
+.perles/
+.rlm_temp/
+skills/beads/
+skills/create-beads-orchestration/
+skills/ralph-wiggum/
+
+# Demo outputs
+demo_*.html
+demo_*.png

@@ -19,13 +19,13 @@ print("\n--- ORIGINAL MERIDIAN CAPABILITIES ---")
 
 # Check personalities exist
 print("\n1. Personality Modes (from original repo)...")
-print("   Location: original_repo/brain/personalities/")
+print("   Location: brain/personalities/")
 print("   Available modes: BASE, RESEARCH_ANALYST, CREATIVE_DIRECTOR, TECHNICAL_COPILOT")
 print("   Status: [OK] Accessible via Markdown files")
 
 # Check sliders exist
 print("\n2. Configuration Sliders (from original repo)...")
-print("   Location: original_repo/brain/sliders/")
+print("   Location: brain/sliders/")
 print("   Dimensions: CREATIVITY, TECHNICALITY, HUMOR, DIRECTNESS, etc.")
 print("   Status: [OK] Accessible via Markdown files")
 
@@ -104,3 +104,4 @@ print("  - Cache: Improves performance")
 
 print("\n[OK] meridian-guide skill: VALIDATED")
 print("  Instructions are accurate and complete!")
+

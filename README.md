@@ -265,7 +265,7 @@ The project uses a multi-persona system (see `.agents/roster.md`):
 - [Product Requirements](meridian-prd/PRD.md)
 - [Memory System Design](meridian-prd/PRD-MEMORY.md)
 - [Implementation Roadmap](meridian-prd/PRD-ROADMAP.md)
-- [Chunk Schema](brain/memory/SCHEMA.md)
+- [Chunk Schema](brain/MEMORY_SCHEMA.md)
 - [Active State](memory/active_state.md)
 
 ## 🤝 Contributing
@@ -287,3 +287,4 @@ MIT License - See original MERIDIAN_Brain repository for details.
 - Original MERIDIAN_Brain framework
 - RLM paper: Zhang et al. "Recursive Language Models"
 - rlm_repl reference implementation
+

@@ -79,7 +79,7 @@ class MeridianConfig:
         "CONCISE": {"verbosity": 15, "directness": 85},
     }
     
-    def __init__(self, base_path: str = "original_repo/brain"):
+    def __init__(self, base_path: str = "brain"):
         self.base_path = Path(base_path)
         self.sliders = dict(self.DEFAULT_SLIDERS)
         self.current_mode = "BASE"
@@ -334,7 +334,7 @@ def parse_slider_command(command: str) -> Optional[Tuple[str, int]]:
 
 
 # Convenience functions
-def load_meridian_config(base_path: str = "original_repo/brain") -> MeridianConfig:
+def load_meridian_config(base_path: str = "brain") -> MeridianConfig:
     """Load MERIDIAN configuration from original repo format."""
     return MeridianConfig(base_path)
 
