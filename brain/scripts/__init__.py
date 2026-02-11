@@ -25,6 +25,14 @@ from .remember_operation import RememberOperation
 from .recall_operation import RecallOperation, RecallResult
 from .reason_operation import ReasonOperation, ReasonResult
 from .cache_system import MemoryCache, DiskCache, CacheManager
+from .memory_policy import MemoryPolicy, load_memory_policy
+from .memory_layers import resolve_all_layer_paths, build_retrieval_plan
+from .memory_safety import (
+    should_allow_layer_write,
+    apply_redaction_rules,
+    is_record_visible_to_project,
+)
+from .layered_memory_store import LayeredMemoryStore
 from .llm_client import (
     LLMClient,
     LLMResponse,
@@ -94,6 +102,15 @@ __all__ = [
     "MemoryCache",
     "DiskCache",
     "CacheManager",
+    # Layered memory policy/resolver
+    "MemoryPolicy",
+    "load_memory_policy",
+    "resolve_all_layer_paths",
+    "build_retrieval_plan",
+    "should_allow_layer_write",
+    "apply_redaction_rules",
+    "is_record_visible_to_project",
+    "LayeredMemoryStore",
     # LLM Wrapper (D2.1)
     "LLMClient",
     "LLMResponse",

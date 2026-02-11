@@ -1,0 +1,10 @@
+# Layered memory policy defaults (safe, local-first).
+enabled: true
+read_layers:
+  - project_agent
+  - project_global
+write_layers:
+  - project_agent
+allow_user_global_write: false
+retention_days: 90
+redaction_rules: []
